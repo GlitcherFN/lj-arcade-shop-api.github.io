@@ -1,0 +1,11 @@
+{
+    "shop": [
+        {
+            "item": "lj",
+            "price": 99999999999999999,
+            "quantity": 1,
+            "description": "placeholder",
+            "image": "placeholder"
+        }
+    ]
+}
