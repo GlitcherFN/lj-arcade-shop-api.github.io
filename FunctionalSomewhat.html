@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythm Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #gameArea {
+            width: 600px;
+            height: 400px;
+            border: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #strumline {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #ff0000;
+            top: 300px;
+            animation: moveStrumline 1.5s linear infinite;
+        }
+
+        #strumline {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #ff0000;
+            top: 300px;
+            animation: moveStrumline 1.5s linear infinite;
+        }
+
+        .note {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            top: 0;
+            transition: top 1s linear;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .indicator {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background-color: #000;
+            top: 350px; /* Adjusted the top position to be in the middle */
+            transition: top 0.5s linear;
+        }
+        .indicatorP2 {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background-color: #000;
+            top: 0px; /* Adjusted the top position to be in the middle */
+            transition: top 0.5s linear;
+        }
+
+        @keyframes moveStrumline {
+            0% {
+                top: 300px;
+            }
+
+            100% {
+                top: 500px;
+            }
+        }
+        .game-sprite {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gameArea">
+        <div id="strumline"></div>
+        <div class="indicator" style="left: 0px;"></div>
+        <div class="indicator" style="left: 150px;"></div>
+        <div class="indicator" style="left: 300px;"></div>
+        <div class="indicator" style="left: 450px;"></div>
+        <div class="indicatorP2" style="left: 0px;"></div>
+        <div class="indicatorP2" style="left: 150px;"></div>
+        <div class="indicatorP2" style="left: 300px;"></div>
+        <div class="indicatorP2" style="left: 450px;"></div>
+    </div>
+
+    <script>
+    var songnamenonjson = 'all-stars';
+    var songname = 'all-stars.json';
+        function parseSprites(spriteXml) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(spriteXml, "text/xml");
+
+            const sprites = xmlDoc.getElementsByTagName("SubTexture");
+            for (const sprite of sprites) {
+                const spriteName = sprite.getAttribute("name");
+                const spriteX = parseInt(sprite.getAttribute("x"));
+                const spriteY = parseInt(sprite.getAttribute("y"));
+                const spriteWidth = parseInt(sprite.getAttribute("width"));
+                const spriteHeight = parseInt(sprite.getAttribute("height"));
+
+                const spriteElement = document.createElement("img");
+                spriteElement.src = xmlDoc.documentElement.getAttribute("imagePath");
+                spriteElement.alt = spriteName;
+                spriteElement.className = "game-sprite";
+                spriteElement.style.left = spriteX + "px";
+                spriteElement.style.top = spriteY + "px";
+                spriteElement.width = spriteWidth;
+                spriteElement.height = spriteHeight;
+
+                gameArea.appendChild(spriteElement);
+            }
+        }
+
+        function loadSpritesFromXmlFile(xmlFilePath) {
+            return fetch(xmlFilePath)
+                .then(response => response.text())
+                .then(xmlData => {
+                    parseSprites(xmlData);
+                })
+                .catch(error => console.error('Error loading XML file:', error));
+        }
+
+        loadSpritesFromXmlFile('sprites.xml');
+
+function parseRhythmGameChart(songJson) {
+    if (songJson.gfVersion == null) {
+        songJson.gfVersion = songJson.player3;
+        songJson.player3 = null;
+    }
+
+    if (songJson.events == null) {
+        songJson.events = [];
+
+        for (let secNum = 0; secNum < songJson.notes.length; secNum++) {
+            const sec = songJson.notes[secNum];
+            let i = 0;
+            const notes = sec.sectionNotes;
+            let len = notes.length;
+
+            while (i < len) {
+                const note = notes[i];
+
+                if (note[1] < 0) {
+                    songJson.events.push([note[0], [[note[1], note[2], note[3]]]]);
+                    notes.splice(i, 1);
+                    len = notes.length;
+                } else {
+                    i++;
+                }
+            }
+        }
+    }
+}
+
+
+function playSong() {
+    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg').play();
+        var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg').play();
+    }
+
+
+             const gameArea = document.getElementById('gameArea');
+        document.addEventListener('keydown', handleKeyDown);
+
+        function handleKeyDown(event) {
+            const key = event.key.toLowerCase();
+            if(key === ' '){
+                playSong();
+            }else{
+            checkHit(key);
+        }
+        }
+
+        function playNoteSound() {
+            var audio = new Audio('hitsound.mp3').play();
+        }
+
+
+        function checkHit(key) {
+    const notes = document.getElementsByClassName('note');
+
+    for (const note of notes) {
+        // Check if note and note.getAttribute('data-key') are not null before accessing properties
+        if (note && note.getAttribute('data-key')) {
+            const noteKey = note.getAttribute('data-key').toLowerCase();
+
+            if (note.offsetTop > 270 && note.offsetTop < 350 && key === noteKey) {
+                // Hit!
+                playNoteSound();
+                note.remove();
+            }
+        }
+    }
+}
+
+        function createNoteFromChart(timestamp, noteType) {
+    const validNoteTypes = [0, 1, 2, 3, 4, 5, 6, 7, -1];
+    if (!validNoteTypes.includes(noteType)) {
+        console.error('Invalid noteType:', noteType);
+        return; // Skip invalid note types
+    }
+
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.style.left = (150 * noteType) + 'px';
+
+    if (noteType === -1) {
+        note.textContent = 'Show Song'; // Adjust as needed for -1
+    } else {
+        const arrowKeys = ['a', 'arrowDown', 'arrowUp', 'arrowRight', 'a', 's', 'd', 'f'];
+        const arrowKey = arrowKeys[noteType];
+        note.setAttribute('data-key', arrowKey);
+        note.textContent = arrowKey.toUpperCase();
+    }
+
+    gameArea.appendChild(note);
+
+    setTimeout(() => {
+        note.style.top = '400px';
+    }, timestamp);
+
+    setTimeout(() => {
+        note.remove();
+    }, timestamp + 1000);
+}
+        function loadChartFromJsonFile(jsonFilePath) {
+            return fetch(jsonFilePath)
+                .then(response => response.json())
+                .then(chartData => {
+                    console.log('Loaded chartData:', chartData);
+
+                    if (chartData && Array.isArray(chartData.song.notes)) {
+                        for (const section of chartData.song.notes) {
+                            if (section.sectionNotes && section.sectionNotes.length > 0) {
+                                for (const noteData of section.sectionNotes) {
+                                    if (Array.isArray(noteData) && noteData.length >= 2) {
+                                        createNoteFromChart(noteData[0], noteData[1]);
+                                    } else {
+                                        console.error('Invalid noteData:', noteData);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        console.error('Invalid or missing chartData.song.notes:', chartData && chartData.song.notes);
+                    }
+                })
+                .catch(error => console.error('Error loading chart:', error));
+        }
+
+        // Load chart from "its-a-me.json"
+        loadChartFromJsonFile(songname);
+
+        // Interval to create random notes (modify as needed)
+        setInterval(() => {
+            const timestamp = Date.now();
+            const noteType = Math.floor(Math.random() * 4);
+            createNoteFromChart(timestamp, noteType);
+        }, 1500);
+
+        
+    </script>
+</body>
+
+</html>
