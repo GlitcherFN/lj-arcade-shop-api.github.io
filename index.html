@@ -200,10 +200,10 @@ function create() {
         for (let i = 0; i < 4; i++) {
             // Play the animation when the corresponding key is pressed
             if (!Boolean(balls)){
-         this.add.image(100, 399, 'notes', frames[1]);
-         this.add.image(250, 399, 'notes', frames[0]);
-         this.add.image(400, 399, 'notes', frames[3]);
-         this.add.image(550, 399, 'notes', frames[2]);
+        //  this.add.image(100, 399, 'notes', frames[1]);
+        //  this.add.image(250, 399, 'notes', frames[0]);
+        //  this.add.image(400, 399, 'notes', frames[3]);
+        //  this.add.image(550, 399, 'notes', frames[2]);
 
                 //  this;
     }else if(Boolean(balls)){
@@ -236,28 +236,55 @@ function create() {
 
 
 function update() {
-    if(Boolean(balls)){
+    // if(Boolean(balls)){
         for (let i = 0; i < 4; i++) {
+            const t1 = this.textures.addSpriteSheetFromAtlas(
+            'penis',
+            {
+                atlas: 'notes',
+                frame: 'up confirm0001',
+                frameWidth: 223,
+                frameHeight: 241,
+                endFrame: 15
+            });
+            const t2 = this.textures.addSpriteSheetFromAtlas(
+            'penis2',
+            {
+                atlas: 'notes',
+                frame: 'up press0001',
+                frameWidth: 138,
+                frameHeight: 152,
+                endFrame: 15
+            });
+            
         //  var spr1 = this.add.sprite(100, 399, 'notes',).play('down confirm0001');
-        const upPress = {
-            key: 'notes',
-            frames: this.anims.generateFrameNumbers('up press000', { start: 0, end: 3 }),
-            frameRate: 10,
+        const upConfirm = {
+            key: 'notesUP',
+            frames: this.anims.generateFrameNumbers('penis', { start: 0, end: 16 }),
+            frameRate: 24,
             repeat: -1
         };
+        const upPress = {
+            key: 'notesUPPress',
+            frames: this.anims.generateFrameNumbers('penis2', { start: 0, end: 16 }),
+            frameRate: 24,
+            repeat: -1
+        };
+        this.anims.create(upConfirm);
         this.anims.create(upPress);
-        // anims.push(upPress);
-        this.add.sprite(400, 400).play('notes');
+        // this.anims.push(upPress);
+        this.add.sprite(400, 400).play('notesUP');
+        // this.add.sprite(400, 400).play('notesUPPress');
             
              // this.add.sprite(400, 399, 'notes').play('down confirm0002');
             // this.add.sprite(550, 399, 'notes').play('right confirm000');
             console.log(balls);
         balls = Boolean(false);
         // var spr1 = this.add.sprite(100, 399).play;
-        var spr1 = this.add.sprite(100, 399, 'notes','left confirm0001');
-        var spr1 = this.add.sprite(100, 399, 'notes','left confirm0002');
+        // var spr1 = this.add.sprite(100, 399, 'notes','boom2');
+        // var spr1 = this.add.sprite(100, 399, 'notes','left confirm0002');
             //  spr1 = this.add.sprite(100, 399, 'notes','left confirm0003');
-    }}
+    }
     // Log the animations array for verification
     // console.log(anims);
     // console.log(xy);
