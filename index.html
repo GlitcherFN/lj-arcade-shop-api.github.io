@@ -23,6 +23,24 @@
             overflow: hidden;
         }
 
+        #strumline {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #ff0000;
+            top: 300px;
+            animation: moveStrumline 1.5s linear infinite;
+        }
+
+        #strumline {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #ff0000;
+            top: 300px;
+            animation: moveStrumline 1.5s linear infinite;
+        }
+
         .note {
             position: absolute;
             width: 50px;
@@ -54,6 +72,15 @@
             transition: top 0.5s linear;
         }
 
+        @keyframes moveStrumline {
+            0% {
+                top: 300px;
+            }
+
+            100% {
+                top: 500px;
+            }
+        }
         .game-sprite {
             position: absolute;
         }
@@ -72,8 +99,201 @@
         <div class="indicatorP2" style="left: 300px;"></div>
         <div class="indicatorP2" style="left: 450px;"></div>
     </div>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.js"></script>
 
     <script>
+        let balls = Boolean(false);
+
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+const game = new Phaser.Game(config);
+
+function preload() {
+    // Load your XML file here
+    this.load.atlasXML('notes', 'NOTE_assets-future.png', 'NOTE_assets-future.xml');
+}
+
+function create() {
+    setTimeout(() => {
+        playSong();
+        
+    }, 500);
+    // Access the loaded XML data
+    const atlasTexture = this.textures.get('notes');
+
+    const frames = atlasTexture.getFrameNames();
+    // const xy = atlasTexture.getFrameBounds();
+
+    // Create an array to store animations
+    const anims = [];
+
+    for (let i = 0; i < frames.length; i++) {
+        const frameData = [
+        { x: 751,
+          y: 243,
+          width: 146, 
+          height: 162, 
+          frameX: -50, 
+          frameY: -5, 
+          frameWidth: 50, 
+          frameHeight: 50
+         },
+        // Add more frame data objects for each frame
+    ];
+        const frameNameNoNum = [];
+        // const fuck = xy[i];
+        const frameName = frames[2];
+        // const frameConfig = frameData[i];
+
+        // if (!frameConfig) {
+        //     console.error(`Frame data missing for ${frameName}`);
+        //     continue;
+        // }
+
+        // const { x, y, width, height, frameX, frameY, frameWidth, frameHeight } = frameConfig;
+
+        // Create an animation config for each frame
+        // const config1 = {
+        //     key: frames[1],
+        //     frames: this.anims.generateFrameNumbers('notes', { start: 0, end: 3 }),
+        //     frameRate: 10, // Adjust as needed
+        //     repeat: 0 // 0 means play once, adjust as needed
+        // };
+        // const config2 = {
+        //     key: frames[0],
+        //     frames: this.anims.generateFrameNumbers('notes', { start: 0, end: 3 }),
+        //     frameRate: 10, // Adjust as needed
+        //     repeat: 0 // 0 means play once, adjust as needed
+        // };
+        // const config3 = {
+        //     key: frames[3],
+        //     frames: this.anims.generateFrameNumbers('notes', { start: 0, end: 3 }),
+        //     frameRate: 10, // Adjust as needed
+        //     repeat: 0 // 0 means play once, adjust as needed
+        // };
+        // const config4 = {
+        //     key: frames[2],
+        //     frames: this.anims.generateFrameNumbers('notes', { start: 0, end: 3 }),
+        //     frameRate: 10, // Adjust as needed
+        //     repeat: 0 // 0 means play once, adjust as needed
+        // };
+
+        // Add the animation config to the array
+        // anims.push(config1);
+        // anims.push(config2);
+        // anims.push(config3);
+        // anims.push(config4);
+        // this.anims.create(config1);
+        // this.anims.create(config2);
+        // this.anims.create(config3);
+        // this.anims.create(config4);
+    }
+        for (let i = 0; i < 4; i++) {
+            // Play the animation when the corresponding key is pressed
+            if (!Boolean(balls)){
+         this.add.image(100, 399, 'notes', frames[1]);
+         this.add.image(250, 399, 'notes', frames[0]);
+         this.add.image(400, 399, 'notes', frames[3]);
+         this.add.image(550, 399, 'notes', frames[2]);
+
+                //  this;
+    }else if(Boolean(balls)){
+
+
+        //  var spr1 = this.add.sprite(100, 399, 'notes',).play('down confirm0001');
+        //  var spr1 = this.add.sprite(250, 399, 'notes', 'up press0000');
+            //  spr1 = this.add.sprite(250, 399, 'notes', 'up press0001');
+            //  spr1 = this.add.sprite(250, 399, 'notes', 'up press0002');
+            //  spr1 = this.add.sprite(250, 399, 'notes', 'up press0003');
+            // this.add.sprite(400, 399, 'notes').play('down confirm0002');
+            // this.add.sprite(550, 399, 'notes').play('right confirm000');
+            console.log(balls);
+    }}
+    // Log the animations array for verification
+    // console.log(anims);
+    // console.log(xy);
+}
+// document.addEventListener('keydown', update); 
+
+// function keyPress(event){
+//         penis = event.key.toLowerCase();
+//             if(penis === 'arrowLeft')
+//             this.add.sprite(300, 200).play('explode1');
+//         this.add.sprite(400, 200).play('explode2');
+
+//         this.add.sprite(300, 400).play('bobble1');
+//         this.add.sprite(400, 400).play('bobble2');
+//     }
+
+
+function update() {
+    if(Boolean(balls)){
+        for (let i = 0; i < 4; i++) {
+        //  var spr1 = this.add.sprite(100, 399, 'notes',).play('down confirm0001');
+        const upPress = {
+            key: ' ',
+            frames: this.anims.generateFrameNumbers('up press000', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        };
+        this.anims.create(upPress);
+        // anims.push(upPress);
+        this.add.sprite(400, 400).play('notes');
+            
+             // this.add.sprite(400, 399, 'notes').play('down confirm0002');
+            // this.add.sprite(550, 399, 'notes').play('right confirm000');
+            console.log(balls);
+        balls = Boolean(false);
+        // var spr1 = this.add.sprite(100, 399).play;
+        var spr1 = this.add.sprite(100, 399, 'notes','left confirm0001');
+        var spr1 = this.add.sprite(100, 399, 'notes','left confirm0002');
+            //  spr1 = this.add.sprite(100, 399, 'notes','left confirm0003');
+    }}
+    // Log the animations array for verification
+    // console.log(anims);
+    // console.log(xy);
+    // Update game logic here
+    // penis = event.key.toLowerCase();
+            // if(new Boolean(true))
+            // for (let i = 0; i < 5; i++) {
+        // this.add.sprite(300, 200).play('arrow');
+        // this.add.sprite(400, 200).play('explode2');
+
+        // this.add.sprite(400, 399).play(frames[45]);
+        // this.add.sprite(400, 400).play('bobble2'  + i);
+            // }
+    }
+
+function parseNotes(xmlData) {
+    // Extract note information from XML
+    const notes = xmlData.getElementsByTagName('SubTexture');
+
+    // Iterate through notes and create sprites
+    for (let i = 0; i < notes.length; i++) {
+        const note = notes[i];
+
+        // Extract attributes like name, x, y, width, height
+        const name = note.getAttribute('name');
+        const x = parseInt(note.getAttribute('x'));
+        const y = parseInt(note.getAttribute('y'));
+
+        // Create a sprite for each note
+        const noteSprite = this.add.sprite(x, y, 'notes', name); // Use 'this' from the surrounding scope
+
+        // Add your custom logic for handling notes
+    }
+}
+
+
     var songnamenonjson = 'all-stars';
     var songname = 'all-stars.json';
         function parseSprites(spriteXml) {
@@ -110,7 +330,7 @@
                 .catch(error => console.error('Error loading XML file:', error));
         }
 
-        loadSpritesFromXmlFile('sprites.xml');
+        // loadSpritesFromXmlFile('sprites.xml');
 
 function parseRhythmGameChart(songJson) {
     if (songJson.gfVersion == null) {
@@ -142,10 +362,9 @@ function parseRhythmGameChart(songJson) {
     }
 }
 
-
 function playSong() {
-    var inst = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Inst.ogg').play();
-        var voices = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Voices.ogg').play();
+    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg').play();
+        var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg').play();
     }
 
 
@@ -153,13 +372,33 @@ function playSong() {
         document.addEventListener('keydown', handleKeyDown);
 
         function handleKeyDown(event) {
-            const key = event.key.toLowerCase();
-            if(key === ' '){
-                playSong();
-            }else{
+    const key = event.key.toLowerCase();
+
+    switch (key) {
+        case ' ':
+            break;
+        case 'arrowleft':
+        balls = Boolean(true);
+            // const sprite = this.add.sprite(400, 399, 'notes', frames[45]);
+            // sprite.play(fraames[45]);
+            break;
+
+            case 'a':
             checkHit(key);
-        }
-        }
+            break;
+            case 'arrowdown':
+            checkHit(key);
+            break;
+            case 'arrowup':
+            checkHit(key);
+            break;
+            case 'arrowright':
+            checkHit(key);
+            break;
+    }
+
+        // Add more cases for other keys as needed
+}
 
         function playNoteSound() {
             var audio = new Audio('hitsound.mp3').play();
