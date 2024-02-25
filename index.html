@@ -17,7 +17,7 @@
 
         #gameArea {
             width: 600px;
-            height: 400px;
+            height: 1000px;
             border: 1px solid #ccc;
             position: relative;
             overflow: hidden;
@@ -106,8 +106,8 @@
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 650,
+    height: 500,
     scene: {
         preload: preload,
         create: create,
@@ -126,7 +126,7 @@ function create() {
     setTimeout(() => {
         playSong();
         
-    }, 500);
+    }, 600);
     // Access the loaded XML data
     const atlasTexture = this.textures.get('notes');
 
@@ -200,10 +200,10 @@ function create() {
         for (let i = 0; i < 4; i++) {
             // Play the animation when the corresponding key is pressed
             if (!Boolean(balls)){
-        //  this.add.image(100, 399, 'notes', frames[1]);
-        //  this.add.image(250, 399, 'notes', frames[0]);
-        //  this.add.image(400, 399, 'notes', frames[3]);
-        //  this.add.image(550, 399, 'notes', frames[2]);
+         this.add.image(100, 399, 'notes', frames[1]);
+         this.add.image(250, 399, 'notes', frames[0]);
+         this.add.image(400, 399, 'notes', frames[3]);
+         this.add.image(550, 399, 'notes', frames[2]);
 
                 //  this;
     }else if(Boolean(balls)){
@@ -216,7 +216,7 @@ function create() {
             //  spr1 = this.add.sprite(250, 399, 'notes', 'up press0003');
             // this.add.sprite(400, 399, 'notes').play('down confirm0002');
             // this.add.sprite(550, 399, 'notes').play('right confirm000');
-            console.log(balls);
+            // console.log(balls);
     }}
     // Log the animations array for verification
     // console.log(anims);
@@ -238,47 +238,47 @@ function create() {
 function update() {
     // if(Boolean(balls)){
         for (let i = 0; i < 4; i++) {
-            const t1 = this.textures.addSpriteSheetFromAtlas(
-            'penis',
-            {
-                atlas: 'notes',
-                frame: 'up confirm0001',
-                frameWidth: 223,
-                frameHeight: 241,
-                endFrame: 15
-            });
-            const t2 = this.textures.addSpriteSheetFromAtlas(
-            'penis2',
-            {
-                atlas: 'notes',
-                frame: 'up press0001',
-                frameWidth: 138,
-                frameHeight: 152,
-                endFrame: 15
-            });
+            // const t1 = this.textures.addSpriteSheetFromAtlas(
+            // 'penis',
+            // {
+            //     atlas: 'notes',
+            //     frame: 'right press0002',
+            //     frameWidth: 153,
+            //     frameHeight: 139,
+            //     endFrame: 3
+            // });
+            // const t2 = this.textures.addSpriteSheetFromAtlas(
+            // 'penis2',
+            // {
+            //     atlas: 'notes',
+            //     frame: 'up confirm0000',
+            //     frameWidth: 138,
+            //     frameHeight: 152,
+            //     endFrame: 15
+            // });
             
         //  var spr1 = this.add.sprite(100, 399, 'notes',).play('down confirm0001');
-        const upConfirm = {
-            key: 'notesUP',
-            frames: this.anims.generateFrameNumbers('penis', { start: 0, end: 16 }),
-            frameRate: 24,
-            repeat: -1
-        };
-        const upPress = {
-            key: 'notesUPPress',
-            frames: this.anims.generateFrameNumbers('penis2', { start: 0, end: 16 }),
-            frameRate: 24,
-            repeat: -1
-        };
-        this.anims.create(upConfirm);
-        this.anims.create(upPress);
+        // const upConfirm = {
+        //     key: 'notes',
+        //     frames: this.anims.generateFrameNumbers('penis', { start: 0, end: 16 }),
+        //     frameRate: 24,
+        //     repeat: -1
+        // };
+        // const upPress = {
+        //     key: 'notesUPPress',
+        //     frames: this.anims.generateFrameNumbers('penis2', { start: 0, end: 16 }),
+        //     frameRate: 24,
+        //     repeat: -1
+        // };
+        // this.anims.create(upPress);
+        // this.anims.create(upConfirm);
         // this.anims.push(upPress);
-        this.add.sprite(400, 400).play('notesUP');
-        // this.add.sprite(400, 400).play('notesUPPress');
+        // this.add.sprite(400, 400).play('notes');
+        // this.add.sprite(400, 400).play('notes');
             
              // this.add.sprite(400, 399, 'notes').play('down confirm0002');
             // this.add.sprite(550, 399, 'notes').play('right confirm000');
-            console.log(balls);
+            // console.log(balls);
         balls = Boolean(false);
         // var spr1 = this.add.sprite(100, 399).play;
         // var spr1 = this.add.sprite(100, 399, 'notes','boom2');
@@ -321,8 +321,8 @@ function parseNotes(xmlData) {
 }
 
 
-    var songnamenonjson = 'all-stars';
-    var songname = 'all-stars.json';
+    var songnamenonjson = 'its-a-me';
+    var songname = 'its-a-me.json';
         function parseSprites(spriteXml) {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(spriteXml, "text/xml");
