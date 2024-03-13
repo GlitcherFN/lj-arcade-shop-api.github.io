@@ -71,6 +71,22 @@
             top: 0px; /* center :3 */
             transition: top 0.5s linear;
         }
+        .men {
+            /* width: 50px; */
+            /* height: 60px; */
+            background-color: #ff0000;
+        }
+        .men1 {
+            /* width: 50px; */
+            /* height: 60px; */
+            background-color: #ff0000;
+        }
+        .men2 {
+            /* width: 50px; */
+            /* height: 60px; */
+            background-color: #ff0000;
+        }
+
 
         @keyframes moveStrumline {
             0% {
@@ -88,6 +104,9 @@
 </head>
 
 <body>
+    <div id="score"></div>
+    <div id="miss"></div>
+    <div id="accuracy"></div>
     <div id="gameArea">
         <div id="strumline"></div>
         <div class="indicator" style="left: 0px;"></div>
@@ -99,11 +118,26 @@
         <div class="indicatorP2" style="left: 300px;"></div>
         <div class="indicatorP2" style="left: 450px;"></div>
     </div>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.js"></script>
 
     <script>
         let balls = Boolean(false);
-
+        let yes = Boolean(false);
+        let leftNote;
+        let upNote;
+        let downNote;
+        let rightNote;
+        let frameIndex = 21;
+        let groupLEFT;
+        let groupUP;
+        let groupDOWN;
+        let groupRIGHT;
+        let score = 0;
+        let miss = 0;
+        let accuracy = 0.00;
+        var scoreDiv = document.getElementById("score");
+        var missDiv = document.getElementById("miss");
+        var accuracyDiv = document.getElementById("accuracy");
 const config = {
     type: Phaser.AUTO,
     width: 650,
@@ -119,56 +153,73 @@ const game = new Phaser.Game(config);
 
 function preload() {
     // Load your XML file here
-    this.load.atlasXML('notes', 'NOTE_assets-future.png', 'NOTE_assets-future.xml');
+    this.load.atlasXML('notes', '/NOTE_assets-future.png', 'NOTE_assets-future.xml');
 }
 
-function create() {
-    setTimeout(() => {
-        playSong();
-        
-    }, 600);
-    // Access the loaded XML data
-    const atlasTexture = this.textures.get('notes');
+        function create() {
+            setTimeout(() => {
+                playSong();
+            }, 600);
 
-    const frames = atlasTexture.getFrameNames();
-    // this code is so ass
-         this.add.image(100, 399, 'notes', frames[1]);
-         this.add.image(250, 399, 'notes', frames[0]);
-         this.add.image(400, 399, 'notes', frames[3]);
-         this.add.image(550, 399, 'notes', frames[2]);
+            // Access the loaded XML data
+            const atlasTexture = this.textures.get('notes');
+
+            for (let i = 21; i < 25; i++)
+        {
+            this.anims.create({ key: 'arrowLEFT', frames: this.anims.generateFrameNames('notes', { prefix: 'arrowLEFT', end: 0, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'arrowUP', frames: this.anims.generateFrameNames('notes', { prefix: 'arrowUP', end: 0, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'arrowDOWN', frames: this.anims.generateFrameNames('notes', { prefix: 'arrowDOWN', end: 0, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'arrowRIGHT', frames: this.anims.generateFrameNames('notes', { prefix: 'arrowRIGHT', end: 0, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'leftConfirm', frames: this.anims.generateFrameNames('notes', { prefix: 'left confirm', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'leftPress', frames: this.anims.generateFrameNames('notes', { prefix: 'left press', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'upConfirm', frames: this.anims.generateFrameNames('notes', { prefix: 'up confirm', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'upPress', frames: this.anims.generateFrameNames('notes', { prefix: 'up press', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'downConfirm', frames: this.anims.generateFrameNames('notes', { prefix: 'down confirm', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'downPress', frames: this.anims.generateFrameNames('notes', { prefix: 'down press', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'rightConfirm', frames: this.anims.generateFrameNames('notes', { prefix: 'right confirm', end: 3, zeroPad: 4 }), repeat: 0 });
+            this.anims.create({ key: 'rightPress', frames: this.anims.generateFrameNames('notes', { prefix: 'right press', end: 3, zeroPad: 4 }), repeat: 0 });
+            groupLEFT = this.add.group({
+                key: 'notes',
+                frame: 'arrowLEFT0000',
+                frameQuantity: 3 * 3
+            });
+            groupUP = this.add.group({
+                key: 'notes',
+                frame: 'arrowUP0000',
+                frameQuantity: 3 * 3
+            });
+            groupDOWN = this.add.group({
+                key: 'notes',
+                frame: 'arrowDOWN0000',
+                frameQuantity: 3 * 3
+            });
+            groupRIGHT = this.add.group({
+                key: 'notes',
+                frame: 'arrowRIGHT0000',
+                frameQuantity: 3 * 3
+            });
+            groupLEFT.playAnimation('arrowLEFT');
+            groupUP.playAnimation('arrowUP');
+            groupDOWN.playAnimation('arrowDOWN');
+            groupRIGHT.playAnimation('arrowRIGHT');
+            Phaser.Actions.GridAlign(groupLEFT.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 0, y: 0});
+            Phaser.Actions.GridAlign(groupUP.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 310, y: 0});
+            Phaser.Actions.GridAlign(groupDOWN.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 160, y: 0});
+            Phaser.Actions.GridAlign(groupRIGHT.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 450, y: 0});       
+    }
 }
+
+
 
 function update() {
+    scoreDiv.textContent = "Score: " + score;
+    missDiv.textContent = "| Misses: " + miss;
+    accuracyDiv.textContent = "| Accuracy: " + accuracy;
     }
 
 
-    var songnamenonjson = 'all-stars';
-    var songname = 'all-stars.json';
-        function parseSprites(spriteXml) {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(spriteXml, "text/xml");
-
-            const sprites = xmlDoc.getElementsByTagName("SubTexture");
-            for (const sprite of sprites) {
-                const spriteName = sprite.getAttribute("name");
-                const spriteX = parseInt(sprite.getAttribute("x"));
-                const spriteY = parseInt(sprite.getAttribute("y"));
-                const spriteWidth = parseInt(sprite.getAttribute("width"));
-                const spriteHeight = parseInt(sprite.getAttribute("height"));
-
-                const spriteElement = document.createElement("img");
-                spriteElement.src = xmlDoc.documentElement.getAttribute("imagePath");
-                spriteElement.alt = spriteName;
-                spriteElement.className = "game-sprite";
-                spriteElement.style.left = spriteX + "px";
-                spriteElement.style.top = spriteY + "px";
-                spriteElement.width = spriteWidth;
-                spriteElement.height = spriteHeight;
-
-                gameArea.appendChild(spriteElement);
-            }
-        }
-
+    var songnamenonjson = 'its-a-me';
+    var songname = 'its-a-me.json';
 function parseRhythmGameChart(songJson) {
     if (songJson.gfVersion == null) {
         songJson.gfVersion = songJson.player3;
@@ -200,8 +251,8 @@ function parseRhythmGameChart(songJson) {
 }
 
 function playSong() {
-    var inst = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Inst.ogg').play();
-        var voices = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Voices.ogg').play();
+    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg').play();
+        var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg').play();
     }
 
 
@@ -214,15 +265,19 @@ function playSong() {
     switch (key) {
             case 'a':
             checkHit(key);
+            groupLEFT.playAnimation('leftPress');
             break;
             case 'arrowdown':
             checkHit(key);
+            groupDOWN.playAnimation('downPress');
             break;
             case 'arrowup':
             checkHit(key);
+            groupUP.playAnimation('upPress');
             break;
             case 'arrowright':
             checkHit(key);
+            groupRIGHT.playAnimation('rightPress');
             break;
     }
 
@@ -235,13 +290,34 @@ function playSong() {
 
         function checkHit(key) {
     const notes = document.getElementsByClassName('note');
+    const scores = document.getElementById('strumline');
 
     for (const note of notes) {
         if (note && note.getAttribute('data-key')) {
             const noteKey = note.getAttribute('data-key').toLowerCase();
 
-            if (note.offsetTop > 270 && note.offsetTop < 350 && key === noteKey) {
+            if (note.offsetTop > 270 && note.offsetTop < 450 && key === noteKey) {
+                console.log(noteKey);
+                switch(noteKey){
+                    case 'a':
+                    groupLEFT.playAnimation('leftConfirm');
+                    setTimeout(() => groupLEFT.playAnimation('arrowLEFT'), 200);
+                    break
+                    case 'arrowup':
+                    groupUP.playAnimation('upConfirm');
+                    setTimeout(() => groupUP.playAnimation('arrowUP'), 200);
+                    break
+                    case 'arrowdown':
+                    groupDOWN.playAnimation('downConfirm');
+                    setTimeout(() => groupDOWN.playAnimation('arrowDOWN'), 200);
+                    break
+                    case 'arrowright':
+                    groupRIGHT.playAnimation('rightConfirm');
+                    setTimeout(() => groupRIGHT.playAnimation('arrowRIGHT'), 200);
+                    break
+                }
                 // Hit!
+                score += 350;
                 playNoteSound();
                 note.remove();
             }
@@ -249,7 +325,7 @@ function playSong() {
     }
 }
 
-        function createNoteFromChart(timestamp, noteType) {
+function createNoteFromChart(timestamp, noteType) {
     const validNoteTypes = [0, 1, 2, 3, 4, 5, 6, 7, -1];
     if (!validNoteTypes.includes(noteType)) {
         console.error('Invalid noteType:', noteType);
@@ -277,7 +353,7 @@ function playSong() {
 
     setTimeout(() => {
         note.remove();
-    }, timestamp + 1000);
+    }, timestamp + 1400);
 }
         function loadChartFromJsonFile(jsonFilePath) {
             return fetch(jsonFilePath)
@@ -314,7 +390,38 @@ function playSong() {
             createNoteFromChart(timestamp, noteType);
         }, 1500);
 
-        
+        function createAndAnimateNote(x, y, noteType) {
+    let animatedNote;
+
+    // Create a new note sprite with the current frame and specified position
+    switch (noteType) {
+        case 0:
+            animatedNote = groupLEFT.playAnimation('arrowLEFT');
+            break;
+        case 1:
+            animatedNote = groupUP.playAnimation('arrowUP');
+            break;
+        case 2:
+            animatedNote = groupDOWN.playAnimation('arrowDOWN');
+            break;
+        case 3:
+            animatedNote = groupRIGHT.playAnimation('arrowRIGHT');
+            break;
+        // Add cases for other note types if needed
+    }
+
+    // Animate the note falling down
+    game.tweens.add({
+        targets: animatedNote,
+        y: 400,
+        duration: 1000,
+        onComplete: () => {
+            animatedNote.destroy(); // Remove the note after animation
+        }
+    });
+}
+// createAndAnimateNote(100, 399, 0); // Example: Left arrow
+
     </script>
 </body>
 
