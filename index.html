@@ -264,17 +264,21 @@ function playSong() {
 
     switch (key) {
             case 'a':
+            case 'arrowleft':
             checkHit(key);
             groupLEFT.playAnimation('leftPress');
             break;
+            case 's':
             case 'arrowdown':
             checkHit(key);
             groupDOWN.playAnimation('downPress');
             break;
+            case 'w':
             case 'arrowup':
             checkHit(key);
             groupUP.playAnimation('upPress');
             break;
+            case 'd':
             case 'arrowright':
             checkHit(key);
             groupRIGHT.playAnimation('rightPress');
@@ -296,7 +300,7 @@ function playSong() {
         if (note && note.getAttribute('data-key')) {
             const noteKey = note.getAttribute('data-key').toLowerCase();
 
-            if (note.offsetTop > 270 && note.offsetTop < 450 && key === noteKey) {
+            if (note.offsetTop > 260 && note.offsetTop < 450 && key === noteKey) {
                 console.log(noteKey);
                 switch(noteKey){
                     case 'a':
