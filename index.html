@@ -251,12 +251,18 @@ function parseRhythmGameChart(songJson) {
 }
 
 function playSong() {
-    var inst = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Inst.ogg').play();
-        var voices = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Voices.ogg').play();
+    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg');
+    var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg');
+    var arr = new Array(inst, voices);
+    for (let i in [0, 1])
+        arr[i].play();
+     
+    if(voices.time != inst.time){
+        voices.time = inst.time;
+    }
     }
 
-
-             const gameArea = document.getElementById('gameArea');
+         const gameArea = document.getElementById('gameArea');
         document.addEventListener('keydown', handleKeyDown);
 
         function handleKeyDown(event) {
