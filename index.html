@@ -42,24 +42,24 @@
          .note[data-key="a"] {
          width: 162px;
          height: 146px;
-         background-image: url('/NOTES/purple0000.png');
+         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/purple0000.png');
          }
          .note[data-key="arrowDown"] {
          width: 147px;
          height: 161px;
-         background-image: url('/NOTES/blue0000.png');
+         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/blue0000.png');
          /* transform: rotate(90deg); */
          }
          .note[data-key="arrowUp"] {
          width: 147px;
          height: 161px;
-         background-image: url('/NOTES/green0000.png');
+         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/green0000.png');
          /* transform: rotate(90deg); */
          }
          .note[data-key="arrowRight"] {
          width: 162px;
          height: 146px;
-         background-image: url('/NOTES/red0000.png');
+         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/red0000.png');
          }
          .men {
          /* width: 50px; */
@@ -148,8 +148,8 @@
          splashSkin = 'diamond';
          function preload() {
          // Load your XML file here
-         this.load.atlasXML('notes', '/NOTE_assets-future.png', 'NOTE_assets-future.xml');
-         this.load.atlasXML('splash', '/noteSplashes/noteSplashes-' + splashSkin + '.png', '/noteSplashes/noteSplashes-' + splashSkin + '.xml');
+         this.load.atlasXML('notes', '/fnf-recreation-in-html-js-php.github.io/NOTE_assets-future.png', 'NOTE_assets-future.xml');
+         this.load.atlasXML('splash', '/fnf-recreation-in-html-js-php.github.io/noteSplashes/noteSplashes-' + splashSkin + '.png', '/fnf-recreation-in-html-js-php.github.io/noteSplashes/noteSplashes-' + splashSkin + '.xml');
          }
          function createNoteGroup(scene, framePrefix) {
          return scene.add.group({
@@ -297,9 +297,8 @@
          }
          }
          async function playSong() {
-    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg');
-    var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg');
-
+         var inst = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Inst.ogg');
+         var voices = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Voices.ogg');
     // Array to hold both Audio objects
     var arr = [inst, voices];
 
