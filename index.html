@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>FNF Recreation in HTML, CSS and JavaScript</title>
+      <title>Rhythm Game</title>
       <style>
          body {
          display: flex;
@@ -14,9 +14,9 @@
          background-color: #f0f0f0;
          }
          #gameArea {
-         width: 600px;
-         height: 1000px;
-         border: 1px solid #ccc;
+         width: 1920;
+         height: 1080;
+         /* border: 1px solid #ccc; */
          position: relative;
          overflow: hidden;
          }
@@ -28,14 +28,6 @@
          top: 300px;
          animation: moveStrumline 1.5s linear infinite;
          } */
-         #strumline {
-         position: absolute;
-         width: 100%;
-         height: 2px;
-         background-color: #ff0000;
-         top: 300px;
-         animation: moveStrumline 1.5s linear infinite;
-         }
          .note {
          position: absolute;
          width: 50px;
@@ -50,24 +42,24 @@
          .note[data-key="a"] {
          width: 162px;
          height: 146px;
-         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/purple0000.png');
+         background-image: url('/NOTES/purple0000.png');
          }
          .note[data-key="arrowDown"] {
          width: 147px;
          height: 161px;
-         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/blue0000.png');
+         background-image: url('/NOTES/blue0000.png');
          /* transform: rotate(90deg); */
          }
          .note[data-key="arrowUp"] {
          width: 147px;
          height: 161px;
-         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/green0000.png');
+         background-image: url('/NOTES/green0000.png');
          /* transform: rotate(90deg); */
          }
          .note[data-key="arrowRight"] {
          width: 162px;
          height: 146px;
-         background-image: url('/fnf-recreation-in-html-js-php.github.io/NOTES/red0000.png');
+         background-image: url('/NOTES/red0000.png');
          }
          .men {
          /* width: 50px; */
@@ -96,12 +88,13 @@
          position: absolute;
          }
       </style>
-   </head>
+   <!-- <iframe width="1903" height="776" src="https://www.youtube.com/embed/POCsTp8pWvw" title="WAS THAT THE BAIAIAIAISYUHAIAIAIIAHU?????!??!?!?!?!!?!?!?!???!!?!??!?!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+</head>
    <body>
       <div id="score"></div>
       <div id="miss"></div>
       <div id="accuracy"></div>
-      <div id="gameArea">
+         <div id="gameArea">
          <!-- <div class="tenor-gif-embed" data-postid="25339125" data-share-method="host" data-aspect-ratio="1.02564" data-width="100%"><a href="https://tenor.com/view/firestone-roblox-roundabout-crash-idiot-gif-25339125">Firestone Roblox GIF</a>from <a href="https://tenor.com/search/firestone-gifs">Firestone GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script> -->
          <div id="strumline"></div>
       </div>
@@ -137,6 +130,10 @@
          let curAnim;
          let num;
          let splashSkin;
+         let groupOpponent;
+         let tabi;
+         let inst;
+         let voices;
          const config = {
          type: Phaser.WEBGL,
          width: 1920,
@@ -151,12 +148,19 @@
          splashSkin = 'diamond';
          function preload() {
          // Load your XML file here
-         this.load.atlasXML('notes', '/fnf-recreation-in-html-js-php.github.io/NOTE_assets-future.png', 'NOTE_assets-future.xml');
-         this.load.atlasXML('splash', '/fnf-recreation-in-html-js-php.github.io/noteSplashes/noteSplashes-' + splashSkin + '.png', '/fnf-recreation-in-html-js-php.github.io/noteSplashes/noteSplashes-' + splashSkin + '.xml');
+         this.load.atlasXML('notes', '/NOTE_assets-future.png', 'NOTE_assets-future.xml');
+         this.load.atlasXML('splash', '/noteSplashes/noteSplashes-' + splashSkin + '.png', '/noteSplashes/noteSplashes-' + splashSkin + '.xml');
          }
          function createNoteGroup(scene, framePrefix) {
          return scene.add.group({
          key: 'notes',
+         frame: framePrefix + '0000',
+         frameQuantity: 3 * 3
+         });
+         }
+         function createCharGroup(scene, who, framePrefix) {
+         return scene.add.group({
+         key: who,
          frame: framePrefix + '0000',
          frameQuantity: 3 * 3
          });
@@ -168,6 +172,24 @@
          frameQuantity: 3 * 3
          });
          }
+         function checkAudioSync(inst, voices) {
+    const currentTimeInst = inst.currentTime;
+    const currentTimeVoices = voices.currentTime;
+
+    // Adjust the threshold based on your needs
+    const threshold = 0.1; // 100 milliseconds
+
+    // Calculate the difference in playback time
+    const timeDifference = Math.abs(currentTimeInst - currentTimeVoices);
+
+    // Check if the difference is within the acceptable threshold
+    const isSynced = timeDifference < threshold;
+
+    if (!isSynced) {
+        // Resync or handle the out-of-sync situation here
+        console.log('Audio files are out of sync!');
+    }
+}
          function create() {
              setTimeout(() => {
                  playSong();
@@ -196,14 +218,28 @@
                  { key: 'rightConfirm', prefix: 'right confirm', end: 3 },
                  { key: 'rightPress', prefix: 'right press', end: 3 }
              ];
+             const opponentanimations = [
+                 { key: 'idle', prefix: 'genoidle', end: 24, repeat: 1},
+                 { key: 'singLEFT', prefix: 'genoleft', end: 14, repeat: 0 },
+                 { key: 'singDOWN', prefix: 'genodown', end: 13, repeat: 0 },
+                 { key: 'singUP', prefix: 'genoup', end: 13, repeat: 0 },
+                 { key: 'singRIGHT', prefix: 'genoright', end: 14, repeat: 0 },
+             ];
                          
              animations.forEach(animation => {
-                 this.anims.create({
+                this.anims.create({
                      key: animation.key,
                      frames: this.anims.generateFrameNames('notes', { prefix: animation.prefix, end: animation.end, zeroPad: 4 }),
                      repeat: 0
                  });
              });
+             opponentanimations.forEach(animation => {
+                this.anims.create({
+                    key: animation.key,
+                    frames: this.anims.generateFrameNames('tabi', { prefix: animation.prefix, end: animation.end, zeroPad: 4 }),
+                    repeat: animation.repeat
+                });
+            });
              for (let color of ['purple', 'green', 'blue', 'red']){
              const animationsSplash = [
                  { key: 'noteSplash' + color, prefix: "note splash " + splashSkin + ' ' +  color + " 1", end: 3 },
@@ -223,20 +259,19 @@
              groupDOWN = createNoteGroup(this, 'arrowDOWN');
              groupRIGHT = createNoteGroup(this, 'arrowRIGHT');
              groupSPLASH = createSplashGroup(this, 'note splash ' + splashSkin + ' red 1');
-             groupLEFT.playAnimation('arrowLEFT');
-             groupUP.playAnimation('arrowUP');
-             groupDOWN.playAnimation('arrowDOWN');
-             groupRIGHT.playAnimation('arrowRIGHT');
+            //  groupOpponent = createCharGroup(this, 'tabi', 'genoidle');
              Phaser.Actions.GridAlign(groupLEFT.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 0, y: 0});
              Phaser.Actions.GridAlign(groupSPLASH.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 0, y: 0});
              Phaser.Actions.GridAlign(groupUP.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 310, y: 0});
              Phaser.Actions.GridAlign(groupDOWN.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 160, y: 0});
              Phaser.Actions.GridAlign(groupRIGHT.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 450, y: 0});       
+            //  Phaser.Actions.GridAlign(groupOpponent.getChildren(), { width: 6, height: 6, cellWidth: 1, cellHeight: 1, x: 450, y: 0});       
              Phaser.Actions.ScaleXY(groupLEFT.getChildren(), 0.01, 0.01);       
              Phaser.Actions.ScaleXY(groupUP.getChildren(), 0.01, 0.01);       
              Phaser.Actions.ScaleXY(groupDOWN.getChildren(), 0.01, 0.01);       
              Phaser.Actions.ScaleXY(groupRIGHT.getChildren(), 0.01, 0.01);       
              Phaser.Actions.ScaleXY(groupSPLASH.getChildren(), 0.01, 0.01);
+            //  Phaser.Actions.ScaleXY(groupOpponent.getChildren(), 0.01, 0.01);
              this.startTime = this.game.getTime();
          }
          }
@@ -261,17 +296,29 @@
              strumX = width * num * 0.6;
          }
          }
-         function playSong() {
-         var inst = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Inst.ogg');
-         var voices = new Audio('/fnf-recreation-in-html-js-php.github.io/songs/' + songnamenonjson + '/Voices.ogg');
-         var arr = new Array(inst, voices);
-         for (let i in [0, 1])
-         arr[i].play();
+         async function playSong() {
+    var inst = new Audio('/songs/' + songnamenonjson + '/Inst.ogg');
+    var voices = new Audio('/songs/' + songnamenonjson + '/Voices.ogg');
+
+    // Array to hold both Audio objects
+    var arr = [inst, voices];
+
+    // Promises to track loading completion of each Audio object
+    var promises = arr.map(audio => new Promise(resolve => {
+        audio.oncanplaythrough = resolve;
+    }));
+
+    // Wait for both Audio objects to be ready
+    await Promise.all(promises);
+
+    // Play the audio files in sequence
+    arr.forEach(audio => audio.play());
+
+    // Check audio synchronization
+    checkAudioSync(inst, voices);
+}
+
          
-         if(inst.time != voices.time){
-         inst.time = voices.time;
-         }
-         }
          const gameArea = document.getElementById('gameArea');
          document.addEventListener('keydown', handleKeyDown);
          document.addEventListener('keyup', handleKeyUp);
@@ -326,7 +373,7 @@
          }
          }
          function playNoteSound() {
-             var audio = new Audio('/fnf-recreation-in-html-js-php.github.io/hitsound.mp3').play();
+             var audio = new Audio('hitsound.mp3').play();
          }
          
          
@@ -344,23 +391,27 @@
                      curAnim = 'purple';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
+                    //  groupOpponent.playAnimation('singLEFT');
                      break
                      case 'arrowup':
                      groupUP.playAnimation('upConfirm');
                      curAnim = 'green';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
+                    //  groupOpponent.playAnimation('singUP');
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                      break
                      case 'arrowdown':
                      groupDOWN.playAnimation('downConfirm');
                      curAnim = 'blue';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
+                    //  groupOpponent.playAnimation('singDOWN');
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                      break
                      case 'arrowright':
                      groupRIGHT.playAnimation('rightConfirm');
                      curAnim = 'red';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
+                    //  groupOpponent.playAnimation('singRIGHT');
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                      break
                  }
@@ -430,7 +481,7 @@
                                      if (gottaHitNote){   
                                          createNoteFromChart(noteData[0], songNoteDataP1);
                                          // for (susNote in Math.floor(susLength))
-                                         // createNoteFromChart(susLength, susNote);
+                                         // createNoteFromChart(susLength, susNote) ;
                                      }
                                      //     // createNoteFromChart(noteData[0], songNoteDataP1);     
                                      // }
