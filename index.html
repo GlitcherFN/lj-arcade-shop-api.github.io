@@ -134,6 +134,7 @@
          let tabi;
          let inst;
          let voices;
+         let controls = ['d', 'f', 'j', 'k'];
          const config = {
          type: Phaser.WEBGL,
          width: 1920,
@@ -326,23 +327,19 @@
          const key = event.key.toLowerCase();
          
          switch (key) {
-             case 'd':
-             case 'arrowleft':
+             case controls[0]:
              checkHit(key);
              groupLEFT.playAnimation('leftPress');
              break;
-             case 'f':
-             case 'arrowdown':
+             case controls[1]:
              checkHit(key);
              groupDOWN.playAnimation('downPress');
              break;
-             case 'j':
-             case 'arrowup':
+             case controls[2]:
              checkHit(key);
              groupUP.playAnimation('upPress');
              break;
-             case 'k':
-             case 'arrowright':
+             case controls[3]:
              checkHit(key);
              groupRIGHT.playAnimation('rightPress');
              break;
@@ -353,20 +350,16 @@
          const key = event.key.toLowerCase();
          
          switch (key) {
-             case 'a':
-             case 'arrowleft':
+            case controls[0]:
              groupLEFT.playAnimation('arrowLEFT');
              break;
-             case 's':
-             case 'arrowdown':
+             case controls[1]:
              groupDOWN.playAnimation('arrowDOWN');
              break;
-             case 'w':
-             case 'arrowup':
+             case controls[2]:
              groupUP.playAnimation('arrowUP');
              break;
-             case 'd':
-             case 'arrowright':
+             case controls[3]:
              groupRIGHT.playAnimation('arrowRIGHT');
              break;
          }
@@ -383,30 +376,30 @@
          for (const note of notes) {
          if (note && note.getAttribute('data-key')) {
              const noteKey = note.getAttribute('data-key').toLowerCase();
-             if (note.offsetTop > -190 && note.offsetTop < 200 && key === noteKey) {
+             if (note.offsetTop > -190 && note.offsetTop < 200) {
                  switch(noteKey){
-                     case 'a':
+                     case 'd':
                      groupLEFT.playAnimation('leftConfirm');
                      curAnim = 'purple';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                     //  groupOpponent.playAnimation('singLEFT');
                      break
-                     case 'arrowup':
-                     groupUP.playAnimation('upConfirm');
+                     case 'f':
+                     groupDOWN.playAnimation('downConfirm');
                      curAnim = 'green';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
                     //  groupOpponent.playAnimation('singUP');
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                      break
-                     case 'arrowdown':
-                     groupDOWN.playAnimation('downConfirm');
+                     case 'j':
+                     groupUP.playAnimation('upConfirm');
                      curAnim = 'blue';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
                     //  groupOpponent.playAnimation('singDOWN');
                      // groupSPLASH.playAnimation('noteSplash2' + curAnim);
                      break
-                     case 'arrowright':
+                     case 'k':
                      groupRIGHT.playAnimation('rightConfirm');
                      curAnim = 'red';
                      groupSPLASH.playAnimation('noteSplash' + curAnim);
